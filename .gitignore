@@ -1,0 +1,6 @@
+*venv
+*.vscode
+.env
+.env-non-dev
+.test.env
+jwt_certs

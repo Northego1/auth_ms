@@ -1,0 +1,3 @@
+from rabbit_mq_manager.pool.channel_pool import channel_pool, channel_pool
+from rabbit_mq_manager.pool.queue_pool import queue_pool
+from rabbit_mq_manager.pool.exchange_pool import exchange_pool
