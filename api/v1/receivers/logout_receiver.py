@@ -12,12 +12,14 @@ from consumer.consumer import Consumer
 from pydantic_schemas.response_schemas.auth_service_responses import MsResponseLoginSchema
 from api.v1 import controllers
 from consumer.consumer_pool import consumer_pool
+from timer import timer
 
 
 consumer = consumer_pool.get_consumer('auth_consumer')
 
 
 @consumer.task('logout')
+@timer
 async def handle_logout(
     message: IncomingMessage,
 ):

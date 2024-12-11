@@ -1,5 +1,7 @@
 import bcrypt
 
+from timer import timer
+
 
 def hash_password(
         password: str

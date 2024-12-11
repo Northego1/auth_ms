@@ -9,17 +9,20 @@ from consumer.consumer import Consumer
 
 from pydantic_schemas.response_schemas.auth_service_responses import MsResponseLoginSchema
 from consumer.consumer_pool import consumer_pool
+from timer import timer
 
 
 consumer = consumer_pool.get_consumer('auth_consumer')
 
 
 @consumer.task('login')
+@timer
 async def handle_login(
     message: IncomingMessage,
 ):
     login_user_controller: LoginUserControllerProtocol = await LoginUserController()
     mes_log.info('Executing the task ...')
+    
     response_login_schema: MsResponseLoginSchema = await login_user_controller.login_user(
         message=message
     )

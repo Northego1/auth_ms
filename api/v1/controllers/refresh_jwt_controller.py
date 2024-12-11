@@ -60,7 +60,7 @@ class RefreshJwtControllerImpl:
                 token_type=settings.jwt.refresh_type
             )
 
-            user: UserSchema = await self.CurrentUserService.get_currenusers_email_keyt_user(
+            user: UserSchema = await self.CurrentUserService.get_current_user(
                 token_schema=refresh_jwt_schema
             )
             try:

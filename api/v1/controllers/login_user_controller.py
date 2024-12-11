@@ -15,6 +15,7 @@ from pydantic_schemas.request_schemas.ms_request_schemas import MsRequestLoginDt
 from pydantic_schemas.response_schemas.auth_service_responses import MsResponseLoginSchema, MsLoginResponsePayload
 from pydantic_schemas.response_schemas.base_response_schema import DefaultMicroServiceResponseSchema
 from pydantic import ValidationError
+from timer import timer
 
 
 class LoginUserControllerProtocol(Protocol):
@@ -43,6 +44,7 @@ class LoginUserControllerImpl:
         self.RefreshJwtService = RefreshJwtService
         self.UserSessionService = UserSessionService
         self.AccessJwtService = AccessJwtService
+
 
     async def login_user(
             self: Self,

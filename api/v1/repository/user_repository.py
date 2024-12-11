@@ -6,6 +6,7 @@ from database.models import UserModel
 
 
 from pydantic_schemas.from_orm.user_schema import UserSchema
+from timer import timer
 from unit_of_work import UnitOfWorkProtocol, Uow
 from dependency_injector import containers, providers
 
@@ -39,6 +40,7 @@ class UserRepositoryProtocol(Protocol):
 class UserRepositoryImpl:
     def __init__(self, uow: UnitOfWorkProtocol):
         self.uow = uow
+
 
     async def get_one_user(
             self: Self,

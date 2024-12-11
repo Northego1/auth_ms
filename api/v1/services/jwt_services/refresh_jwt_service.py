@@ -15,6 +15,7 @@ from pydantic_schemas.jwt_schemas import RefreshTokenPayloadSchema, RefreshToken
 from config import settings
 from dependency_injector import providers, containers
 from logger import message_logger as mes_log
+from timer import timer
 
 
 class RefreshJwtServiceProtocol(Protocol):

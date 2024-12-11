@@ -15,6 +15,7 @@ from logger import message_logger as mes_log
 
 from pydantic_schemas.from_orm.user_schema import UserSchema
 from pydantic_schemas.request_schemas.ms_request_schemas import MsRequestLoginDto
+from timer import timer
 
 class UserAuthServiceProtocol(Protocol):
     def _verify_password(

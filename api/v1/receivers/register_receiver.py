@@ -4,12 +4,14 @@ from logger import message_logger as mes_log
 from consumer.consumer import Consumer
 from api.v1 import controllers
 from consumer.consumer_pool import consumer_pool
+from timer import timer
 
 
 consumer = consumer_pool.get_consumer('auth_consumer')
 
 
 @consumer.task('register')
+@timer
 async def handle_register(
     message: IncomingMessage,
 ):
