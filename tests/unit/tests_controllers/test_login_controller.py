@@ -1,9 +1,6 @@
-from email import message
 import pickle
-from typing import Optional, Union
 from unittest.mock import MagicMock
 from dependency_injector import providers
-from pydantic import BaseModel
 from api.v1.controllers.login_user_controller import LoginUserControllerImpl, LoginUserControllerProtocol
 from api.v1.controllers.login_user_controller import (
     container
@@ -31,8 +28,16 @@ import pytest
         (
             {
                 "username": "test_user",
-                "hashed_password": "test_pass",
-                "fingerprint": "mozilla"
+                "hashed_password": b"1test_pass",
+                "fingerprint": b"mozilla"
+            },
+            True
+        ),
+                (
+            {
+                "username": 123,
+                "hashed_password": b"1test_pass",
+                "fingerprint": b"mozilla"
             },
             True
         )
@@ -56,6 +61,6 @@ async def test_login_controller(
     login_controller: LoginUserControllerProtocol = container.login_controller()
     result = await login_controller.login_user(message=mock_message)
     if exception:
-        assert isinstance(result, DefaultMicroServiceResponseSchema)
+        assert result.status_code >= 400
     else:
-        assert isinstance(result, MsResponseLoginSchema)
+        assert 200 <= result.status_code < 300

@@ -12,6 +12,11 @@ async def register_user_mock(user_register_schema: MsRequestRegisterDto):
             status_code=401,
             detail='Имя пользователя уже занято'
         )
+    if user_register_schema.email != 'test@email.com':
+        raise DatabaseError(
+            status_code=401,
+            detail='Текущий адрес почты уже существует'
+        )
     return UserSchema(
             id='e325db35-6ab9-4945-9a81-e2b5466938a6',
             username="test_user",

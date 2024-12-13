@@ -74,11 +74,13 @@ class UserRepositoryImpl:
             await uow.session.flush()
             return UserSchema.model_validate(new_user) if new_user else None
 
+
     async def update_user(
             self: Self, 
             user_id: int
     ):
         pass
+
 
     async def delete_user(
             self: Self

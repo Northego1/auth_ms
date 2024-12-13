@@ -6,6 +6,7 @@ from api.v1.repository.user_session_repository import (
     UserSessionRepositoryProtocol,
     UserSessionRepository
 )
+from api.v1.utils.jwt_getters import CheckJwt
 from api.v1.utils.jwt_utils import encode_jwt
 from exceptions import MicroServiceError
 
@@ -38,8 +39,14 @@ class RefreshJwtServiceProtocol(Protocol):
         pass
 
 
+    def decode_and_validate_jwt(
+            token: str,
+            token_type: str
+    ) -> RefreshTokenSchema:
+        pass
 
-class RefreshJwtServiceImpl:
+
+class RefreshJwtServiceImpl(CheckJwt):
     def __init__(
             self: Self,
             UserSessionRepository: UserSessionRepositoryProtocol
@@ -76,6 +83,7 @@ class RefreshJwtServiceImpl:
                 detail='Неизвестная ошибка создания рефреш токена'
             )
 
+
     async def revoke_token(
             self: Self,
             revoke_by: str,
@@ -91,9 +99,6 @@ class RefreshJwtServiceImpl:
                 raise MicroServiceError('Не найдена сессия')
         except MicroServiceError as e:
             raise MicroServiceError(detail="Ошибка работы с базой данных") from e
-
-
-
 
 
 class Container(containers.DeclarativeContainer):

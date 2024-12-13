@@ -49,7 +49,7 @@ class UserSessionRepositoryProtocol(Protocol):
         user_id: uuid.UUID,
         value: Any = None,
         delete_by: Optional[str] = None,
-    ):
+    ) -> bool:
         pass
 
 
@@ -152,7 +152,7 @@ class UserSessionRepositoryImpl:
             user_id: uuid.UUID,
             value: Any = None,
             delete_by: Optional[str] = None,
-    ):
+    ) -> bool:
         async with self.uow as uow:
             if delete_by:
                 delete_subquery = (

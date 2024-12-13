@@ -11,6 +11,26 @@ from pydantic_schemas.request_schemas.ms_request_schemas import MsRequestRegiste
 from config import settings
 
 
+def mock_decode_and_validate_jwt(token: str, token_type: str):
+    if token == 'non_correct':
+        raise MicroServiceError(status_code=403, detail='Токен некорректен или просрочен')
+    if token_type != settings.jwt.refresh_type:
+        raise MicroServiceError(status_code=403, detail="Неверный тип токена")
+    token_payload = RefreshTokenPayloadSchema(
+        type=token_type,
+        sub='test_user',
+        user_id='e325db35-6ab9-4945-9a81-e2b5466938a6',
+        jti=uuid.uuid4(),
+        exp=datetime.now(timezone.utc) + timedelta(settings.jwt.refresh_expire),
+    )
+    token_schema = RefreshTokenSchema(
+        token=token,
+        token_type=token_type,
+        payload=token_payload
+    )
+    return token_schema
+
+
 async def mock_create_token(user: UserSchema):
     try:
         payload = RefreshTokenPayloadSchema(
@@ -42,5 +62,8 @@ MockRefreshJwtService.create_token = AsyncMock(
 )
 MockRefreshJwtService.revoke_token = AsyncMock(
     return_value=None
+)
+MockRefreshJwtService.decode_and_validate_jwt = Mock(
+    side_effect=mock_decode_and_validate_jwt
 )
 

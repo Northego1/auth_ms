@@ -4,7 +4,6 @@ from aio_pika import IncomingMessage
 from dependency_injector import containers, providers
 from pydantic import ValidationError
 from api.v1.services import jwt_services
-from api.v1.utils.jwt_getters import decode_and_validate_jwt
 from exceptions import InvalidRequestDataError, MicroServiceError
 from pydantic_schemas.jwt_schemas import AccessTokenSchema, RefreshTokenSchema
 from pydantic_schemas.request_schemas.ms_request_schemas import MsRequestLogoutDto
@@ -41,17 +40,21 @@ class LogoutUserControllerImpl:
                 request_schema = MsRequestLogoutDto.from_message(message)
             except ValidationError as e:
                 raise InvalidRequestDataError() from e     
-            access_token_schema = decode_and_validate_jwt(
-                refresh_token=request_schema.access_token,
-                token_type=settings.jwt.access_type
+            access_token_schema: AccessTokenSchema = (
+                self.AccessTokenService.decode_and_validate_jwt(
+                    token=request_schema.access_token,
+                    token_type=settings.jwt.access_type
+                )
             )
             await self.AccessTokenService.revoke_token(
                 access_token_schema=access_token_schema
             )
             if request_schema.refresh_token:
-                refresh_jwt_schema = decode_and_validate_jwt(
-                        refresh_token=request_schema.refresh_token,
-                    token_type=settings.jwt.refresh_type
+                refresh_jwt_schema: RefreshTokenSchema = (
+                    self.RefreshTokenService.decode_and_validate_jwt(
+                        token=request_schema.refresh_token,
+                        token_type=settings.jwt.refresh_type
+                    )
                 )
                 await self.RefreshTokenService.revoke_token(
                     'fingerprint_hash',

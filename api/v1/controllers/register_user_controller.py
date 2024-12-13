@@ -62,10 +62,10 @@ class RegisterUserControllerImpl:
         return response_schema   
 
 class Container(containers.DeclarativeContainer):
-    user_register_service = providers.Factory(
+    register_controller = providers.Factory(
         RegisterUserControllerImpl,
         RegisterUserService=RegisterUserService
     )
 
 container = Container()
-RegiserUserController = container.user_register_service
+RegiserUserController = container.register_controller

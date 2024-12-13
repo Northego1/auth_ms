@@ -6,6 +6,7 @@ from api.v1.repository.black_list_access_jwt_repository import (
     AccessJwtBlackListRepositoryProtocol,
     AccessTokenBlackListRepository
 )
+from api.v1.utils.jwt_getters import CheckJwt
 from api.v1.utils.jwt_utils import encode_jwt
 from exceptions import MicroServiceError
 
@@ -24,6 +25,13 @@ class AccessTokenServiceProtocol(Protocol):
     ) -> AccessTokenSchema:
         pass
 
+    
+    def decode_and_validate_jwt(
+            token: str,
+            token_type: str
+    ) -> AccessTokenSchema:
+        pass
+
 
     async def revoke_token(self: Self, access_token_schema: AccessTokenSchema):
         pass
@@ -39,7 +47,7 @@ class AccessTokenServiceProtocol(Protocol):
         '''
 
 
-class AccessTokenServiceImpl:
+class AccessTokenServiceImpl(CheckJwt):
     def __init__(
             self: Self,
             AccessTokenBlackListRepository: AccessJwtBlackListRepositoryProtocol

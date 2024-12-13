@@ -4,10 +4,9 @@ from aio_pika import IncomingMessage
 from pydantic import ValidationError
 
 
-from api.v1.utils.jwt_getters import decode_and_validate_jwt
 from exceptions import InvalidRequestDataError, MicroServiceError
 from pydantic_schemas.from_orm.user_schema import UserSchema
-from pydantic_schemas.jwt_schemas import AccessTokenSchema
+from pydantic_schemas.jwt_schemas import AccessTokenSchema, RefreshTokenSchema
 from pydantic_schemas.request_schemas.ms_request_schemas import MsRequestRefreshJwtDto
 from pydantic_schemas.response_schemas.auth_service_responses import MsResponseRefreshJwtSchema
 
@@ -55,11 +54,12 @@ class RefreshJwtControllerImpl:
                 request_schema = MsRequestRefreshJwtDto.from_message(message)
             except ValidationError as e:
                 raise InvalidRequestDataError() from e        
-            refresh_jwt_schema = decode_and_validate_jwt(
-                refresh_token=request_schema.refresh_token,
-                token_type=settings.jwt.refresh_type
+            refresh_jwt_schema: RefreshTokenSchema = (
+                self.RefreshTokenService.decode_and_validate_jwt(
+                    token=request_schema.refresh_token,
+                    token_type=settings.jwt.refresh_type
+                )
             )
-
             user: UserSchema = await self.CurrentUserService.get_current_user(
                 token_schema=refresh_jwt_schema
             )
@@ -96,10 +96,10 @@ class RefreshJwtControllerImpl:
 class Container(containers.DeclarativeContainer):
     refresh_jwt_controller = providers.Factory(
         RefreshJwtControllerImpl,
-        auth_services.CurrentUserService,
-        auth_services.UserSessionService,
-        jwt_services.AccessJwtService,
-        jwt_services.RefreshJwtService,
+        CurrentUserService=auth_services.CurrentUserService,
+        UserSessionService=auth_services.UserSessionService,
+        AccessJwtService=jwt_services.AccessJwtService,
+        RefreshJwtService=jwt_services.RefreshJwtService,
     )
 
 container = Container()
