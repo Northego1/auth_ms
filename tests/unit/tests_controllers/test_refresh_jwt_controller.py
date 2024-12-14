@@ -11,6 +11,7 @@ from aio_pika import IncomingMessage
 from tests.unit.mocks.services import auth_services
 from tests.unit.mocks.services import jwt_services
 import pytest
+from tests.unit.config_data import mock_refresh_token
 
 
 @pytest.mark.asyncio
@@ -20,14 +21,14 @@ import pytest
         (
             {
                 "fingerprint": b"mozilla",
-                "refresh_token": "refresh_token",
+                "refresh_token": mock_refresh_token.token,
             },
             False
         ),
                 (
             {
                 "fingerprint": 123,
-                "refresh_token": "refresh_token",
+                "refresh_token": mock_refresh_token.token,
             },
             True
         ),

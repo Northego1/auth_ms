@@ -7,14 +7,19 @@ from api.v1.repository.user_session_repository import (
     UserSessionRepositoryProtocol
 )
 from config import settings
+from exceptions import DatabaseError, MicroServiceError
+from tests.unit.config_data import mock_user
 
 
-MockUserSessionRepository = cast(
-    UserSessionRepositoryProtocol,
-    Mock()
-)
-MockUserSessionRepository.create_user_session = AsyncMock(
-    return_value = UserSessionModel(
+async def create_user_session_side_effect(
+        refresh_token: str,
+        fingerprint_hash: bytes,
+        expire_at: datetime,
+        user_id: uuid.UUID,
+) -> UserSessionModel:   
+    if not isinstance(fingerprint_hash, bytes):
+        raise DatabaseError()
+    return UserSessionModel(
         id=uuid.uuid4(),
         user_id=uuid.uuid4(),
         fingerprint_hash=b'mozilla',
@@ -22,6 +27,26 @@ MockUserSessionRepository.create_user_session = AsyncMock(
         expire_at=datetime.now(timezone.utc) + timedelta(settings.jwt.refresh_expire),
         session_num=5
     )
+
+
+async def delete_session_if_fingerprint_invalid_side_effect(
+        user_id: uuid.UUID,
+        refresh_token: str,
+        fingerprint_hash: bytes
+) -> bool:
+    if fingerprint_hash != b'mozilla':
+        raise MicroServiceError(
+            status_code=403
+        )
+    return False
+
+
+MockUserSessionRepository = cast(
+    UserSessionRepositoryProtocol,
+    Mock()
+)
+MockUserSessionRepository.create_user_session = AsyncMock(
+    side_effect=create_user_session_side_effect
 )
 MockUserSessionRepository.update_user_session = AsyncMock(
     return_value=None
@@ -36,5 +61,5 @@ MockUserSessionRepository.delete_user_session = AsyncMock(
     return_value=True
 )
 MockUserSessionRepository.delete_session_if_fingerprint_invalid = AsyncMock(
-    return_value=True
+    side_effect=delete_session_if_fingerprint_invalid_side_effect
 )

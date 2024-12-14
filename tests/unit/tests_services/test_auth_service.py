@@ -1,18 +1,19 @@
 from typing import Optional
-from unittest.mock import AsyncMock, patch
+from unittest.mock import Mock, patch
 from dependency_injector import providers
 from api.v1.services.auth_services.autorization_user_service import (
     UserAuthServiceImpl,
     container
 )
+from exceptions import AuthError
 from pydantic_schemas.from_orm.user_schema import UserSchema
 from tests.unit.mocks import repository
-from aio_pika import IncomingMessage
 from pydantic_schemas.request_schemas.ms_request_schemas import MsRequestLoginDto
 
 import pytest
 
 from tests.unit.mocks.services.auth_services.autorization_user_service import _verify_password_side_effect
+from tests.unit.config_data import mock_user
 
 
 @pytest.mark.asyncio
@@ -21,14 +22,29 @@ from tests.unit.mocks.services.auth_services.autorization_user_service import _v
     [
         (
             MsRequestLoginDto(
-                username='test_user',
-                hashed_password=b'test_pass',
+                username=mock_user.username,
+                hashed_password=mock_user.hashed_password,
                 fingerprint=b'mozilla'
             ),
             None
-        )
-    ],
-    ids=['correct_test']
+        ),
+        (
+            MsRequestLoginDto(
+                username=mock_user.username,
+                hashed_password='non_correct',
+                fingerprint=b'mozilla'
+            ),
+            pytest.raises(AuthError)
+        ),
+        (
+            MsRequestLoginDto(
+                username='non_correct',
+                hashed_password=mock_user.hashed_password,
+                fingerprint=b'mozilla'
+            ),
+            pytest.raises(AuthError)
+        ),
+    ]
 )
 async def test_user_auth_service(
     user_login_schema: MsRequestLoginDto,
@@ -37,7 +53,7 @@ async def test_user_auth_service(
     with patch.object(
         UserAuthServiceImpl,
         '_verify_password',
-        new=AsyncMock(
+        new=Mock(
             side_effect=_verify_password_side_effect
         )
     ):

@@ -80,8 +80,4 @@ class Container(containers.DeclarativeContainer):
 
 
 container = Container()
-Uow: UnitOfWorkProtocol = container.unit_of_work()
-
-
-container = Container()
 Uow: UnitOfWorkProtocol = container.unit_of_work

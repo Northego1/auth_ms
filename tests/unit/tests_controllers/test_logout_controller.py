@@ -10,16 +10,17 @@ from api.v1.controllers.logout_user_controller import (
 from aio_pika import IncomingMessage
 from tests.unit.mocks.services import jwt_services
 import pytest
+from tests.unit.config_data import mock_access_token, mock_refresh_token
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    "message_body, exception",
+    "message_body, exception", 
     [
         (
             {
-                "access_token": "access_token",
-                "refresh_token": "refresh_token",
+                "access_token": mock_access_token.token,
+                "refresh_token": mock_refresh_token.token,
                 "fingerprint": b'mozilla'
             },
             False
@@ -27,14 +28,14 @@ import pytest
         (
             {
                 "access_token": "non_correct",
-                "refresh_token": "refresh_token",
+                "refresh_token": mock_refresh_token.token,
                 "fingerprint": b'mozilla'
             },
             True
         ),
         (
             {
-                "access_token": "access_token",
+                "access_token": mock_access_token.token,
                 "refresh_token": "non_correct",
                 "fingerprint": b'mozilla'
             },
@@ -42,8 +43,8 @@ import pytest
         ),
         (
             {
-                "access_token": "access_token",
-                "refresh_token": "non_correct",
+                "access_token": mock_access_token.token,
+                "refresh_token": mock_refresh_token.token,
                 "fingerprint": 123
             },
             True

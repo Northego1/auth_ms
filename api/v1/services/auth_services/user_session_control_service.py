@@ -105,7 +105,7 @@ class UserSessionServiceImpl:
                 fingerprint_hash=current_fingerprint_hash
         ):
             raise MicroServiceError(detail='Подозрительные действия')
-
+        
 
     async def _create_or_replace_session(
             self: Self,

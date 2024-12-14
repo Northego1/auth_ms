@@ -9,6 +9,7 @@ from aio_pika import IncomingMessage
 from tests.unit.mocks.services import auth_services
 from tests.unit.mocks.services import jwt_services
 import pytest
+from tests.unit.config_data import mock_user
 
 
 @pytest.mark.asyncio
@@ -17,16 +18,16 @@ import pytest
     [
         (
             {
-                "username": "test_user",
-                "hashed_password": b"test_pass",
+                "username": mock_user.username,
+                "hashed_password": mock_user.hashed_password,
                 "fingerprint": b"mozilla"
             },
             False
         ),
         (
             {
-                "username": "test_user",
-                "hashed_password": b"1test_pass",
+                "username": mock_user.username,
+                "hashed_password": b"non_correct",
                 "fingerprint": b"mozilla"
             },
             True
@@ -34,7 +35,7 @@ import pytest
                 (
             {
                 "username": 123,
-                "hashed_password": b"1test_pass",
+                "hashed_password": mock_user.hashed_password,
                 "fingerprint": b"mozilla"
             },
             True

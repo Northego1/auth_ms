@@ -44,6 +44,9 @@ class RegisterUserServiceImpl:
                 status_code=e.status_code,
                 detail=e.detail
             ) from e
+        except AttributeError as e:
+            raise MicroServiceError()
+            
 
 
 class Container(containers.DeclarativeContainer):

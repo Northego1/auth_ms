@@ -2,9 +2,6 @@ from typing import cast
 from unittest.mock import AsyncMock, Mock
 
 from api.v1.services import auth_services
-from exceptions import AuthError, DatabaseError, MicroServiceError
-from pydantic_schemas.from_orm.user_schema import UserSchema
-from pydantic_schemas.request_schemas.ms_request_schemas import MsRequestRegisterDto
 
 
 MockUserSessionService = cast(

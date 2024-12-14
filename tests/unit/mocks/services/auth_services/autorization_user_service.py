@@ -5,24 +5,25 @@ from api.v1.services import auth_services
 from exceptions import AuthError
 from pydantic_schemas.from_orm.user_schema import UserSchema
 from pydantic_schemas.request_schemas.ms_request_schemas import MsRequestLoginDto
+from tests.unit.config_data import mock_user
 
 
 async def mock_authentificate_user(user_login_schema: MsRequestLoginDto):
-    _verify_password_side_effect(user_login_schema.hashed_password)
-    return_value=UserSchema(
-        id='e325db35-6ab9-4945-9a81-e2b5466938a6',
-        username="test_user",
-        hashed_password=b'test_pass',
-        email='test@email.com',
-        is_active=True
+    _verify_password_side_effect(
+        username=user_login_schema.username,
+        hashed_password_from_db=mock_user.hashed_password,
+        hashed_password_from_request=user_login_schema.hashed_password
     )
-    return return_value
+
+    return mock_user
 
 
 def _verify_password_side_effect(
+        username: str,
+        hashed_password_from_db: bytes,
         hashed_password_from_request: bytes,
 ):
-    if hashed_password_from_request != b'test_pass':
+    if hashed_password_from_request != hashed_password_from_db:
         raise AuthError(detail='Неправильный пароль')
 
 

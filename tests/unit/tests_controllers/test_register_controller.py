@@ -50,9 +50,6 @@ import pytest
             True
         )
     ],
-    ids=[
-        "correct_request, non_correct_username, email_alredy_exists, non_correct_email"
-    ]
 )
 async def test_register_controller(
     message_body: dict,

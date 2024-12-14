@@ -2,7 +2,7 @@ from typing import Literal, Protocol, Self, Union
 
 from api.v1.repository.user_repository import UserRepositoryProtocol, UserRepository
 from database.models import UserModel
-from exceptions import MicroServiceError
+from exceptions import DatabaseError, MicroServiceError
 
 from pydantic_schemas.from_orm.user_schema import UserSchema
 from pydantic_schemas.jwt_schemas import AccessTokenSchema, RefreshTokenSchema
@@ -28,11 +28,19 @@ class CurrentUserServiceImpl:
         self: Self,
         token_schema: Union[AccessTokenSchema, RefreshTokenSchema],
     ) -> UserSchema:
-        user: UserModel = await self.UserRepository.get_one_user(
-            searching_parameter='id',
-            value=token_schema.payload.user_id
-        )
-        return user
+        try:
+            user: UserModel = await self.UserRepository.get_one_user(
+                searching_parameter='id',
+                value=token_schema.payload.user_id
+            )
+            return user
+        except DatabaseError as e:
+            raise MicroServiceError(
+                status_code=e.status_code,
+                detail=e.detail
+            )
+        except Exception as e:
+            raise MicroServiceError()
 
 
 class Container(containers.DeclarativeContainer):
