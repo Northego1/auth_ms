@@ -6,8 +6,6 @@ from api.v1.controllers.login_user_controller import (
     container
 )
 from aio_pika import IncomingMessage
-from pydantic_schemas.response_schemas.auth_service_responses import MsResponseLoginSchema
-from pydantic_schemas.response_schemas.base_response_schema import DefaultMicroServiceResponseSchema
 from tests.unit.mocks.services import auth_services
 from tests.unit.mocks.services import jwt_services
 import pytest
