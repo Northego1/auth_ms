@@ -32,7 +32,7 @@ from tests.unit.config_data import mock_user
             },
             True
         ),
-                (
+        (
             {
                 "username": 123,
                 "hashed_password": mock_user.hashed_password,

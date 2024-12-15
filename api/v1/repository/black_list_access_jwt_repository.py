@@ -21,7 +21,7 @@ class AccessJwtBlackListRepositoryProtocol(Protocol):
     async def read_access_token(
             self: Self,
             jti: uuid.UUID
-    ) -> BlackListAccessJwtModel:
+    ) -> BlackListAccessJwtModel | None:
         pass
 
 

@@ -46,6 +46,7 @@ class UnitOfWorkImpl:
         try:
             if exc_type:
                 await self.session.rollback()
+                # print(exc_value)
                 for constraint, user_message in CONSTRAINT_ERROR_MESSAGES.items():
                     if constraint in str(exc_value):
                         raise DatabaseError(

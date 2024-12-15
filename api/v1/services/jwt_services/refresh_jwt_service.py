@@ -20,7 +20,7 @@ from timer import timer
 
 
 class RefreshJwtServiceProtocol(Protocol):
-    async def create_token(
+    def create_token(
             self: Self,
             user: UserSchema,
     ) -> RefreshTokenSchema:
@@ -54,7 +54,7 @@ class RefreshJwtServiceImpl(CheckJwt):
         self.UserSessionRepository = UserSessionRepository
 
 
-    async def create_token(
+    def create_token(
             self: Self,
             user: UserSchema,
     ) -> RefreshTokenSchema:

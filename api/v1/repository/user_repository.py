@@ -1,4 +1,5 @@
 from typing import Any, Protocol, Self
+from uuid import uuid4
 from pydantic import EmailStr
 from sqlalchemy import select
 
@@ -65,6 +66,7 @@ class UserRepositoryImpl:
     ) -> UserSchema | None:
         async with self.uow as uow:
             new_user = UserModel(
+                id=uuid4(),
                 username=username,
                 hashed_password=hashed_password,
                 email=email,

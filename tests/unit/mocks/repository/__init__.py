@@ -1,5 +1,5 @@
 from tests.unit.mocks.repository.black_list_access_jwt_repository import (
-    BlackListAccessJwtModel
+    MockAccessTokenBlackListRepository
 )
 from tests.unit.mocks.repository.user_repository import (
     MockUserRepository

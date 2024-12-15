@@ -19,7 +19,7 @@ MockRefreshJwtService = cast(
     jwt_services.RefreshJwtServiceProtocol,
     Mock()
 )
-MockRefreshJwtService.create_token = AsyncMock(
+MockRefreshJwtService.create_token = Mock(
     return_value=mock_refresh_token
 )
 MockRefreshJwtService.revoke_token = AsyncMock(

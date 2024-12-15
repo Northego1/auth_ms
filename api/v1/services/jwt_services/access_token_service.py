@@ -100,11 +100,13 @@ class AccessTokenServiceImpl(CheckJwt):
             self: Self,
             access_token_schema: AccessTokenSchema
     ):
-        if not await self.AccessTokenBlackListRepository.read_access_token(
-            jti=access_token_schema.payload.jti
-        ):
-            raise MicroServiceError(status_code=403, detail='access_token_invalid')
-
+        try:
+            if not await self.AccessTokenBlackListRepository.read_access_token(
+                jti=access_token_schema.payload.jti
+            ):
+                raise MicroServiceError(status_code=403, detail='access_token_invalid')
+        except AttributeError:
+            raise MicroServiceError()
 
 class Container(containers.DeclarativeContainer):
     access_token_service = providers.Factory(

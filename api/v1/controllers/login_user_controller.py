@@ -61,7 +61,7 @@ class LoginUserControllerImpl:
             )
             mes_log.info(f"User {request_schema.username!r} success authentificated")
             mes_log.info(f"Trying to create refresh token")
-            refresh_token: RefreshTokenSchema = await self.RefreshJwtService.create_token(
+            refresh_token: RefreshTokenSchema = self.RefreshJwtService.create_token(
                 user=user
             )
             mes_log.info(f"Refresh token created")
