@@ -1,16 +1,12 @@
 import asyncio
 import importlib
 import pkgutil
-import queue
-import signal
 
 from aio_pika import ExchangeType
-from consumer import consumer
 from rabbit_mq_manager import pool
 from exceptions import MicroServiceError
 from rabbit_mq_manager.connection_manager import connection_manager
 from logger import service_logger as serv_log
-from aio_pika.abc import AbstractConnection, AbstractChannel
 from consumer.consumer_pool import consumer_pool
 
 

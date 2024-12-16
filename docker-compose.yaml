@@ -4,17 +4,25 @@ services:
     build:
       context: .
     command: 
+      ["sh", "docker/app.sh"]
+    env_file:
+      - .env
+    depends_on:
+      - postgresql
+
   postgresql:
-    container_name: psql_db_auth
+    container_name: psql_auth_ms
     image: postgres:latest
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-0420}
       POSTGRES_DB: auth
     ports:
-      - "5436:5432"
+      - "5440:5432"
+    env_file:
+      - .env
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./init-db:/docker-entrypoint-initdb.d
+      - ./docker/db-init:/docker-entrypoint-initdb.d
 volumes:
   postgres-data:

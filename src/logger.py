@@ -18,7 +18,7 @@ def configure_loggers():
 
     # Логгер для сообщений
     message_logger = logging.getLogger("message")
-    message_logger.setLevel(logging.WARNING)
+    message_logger.setLevel(logging.INFO)
     message_handler = logging.StreamHandler()
     message_handler.setFormatter(
         logging.Formatter(

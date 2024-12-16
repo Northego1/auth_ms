@@ -58,7 +58,6 @@ class RegisterUserControllerImpl:
                 status_code=e.status_code,
                 detail=e.detail,
             )
-        print(response_schema.status_code)
         return response_schema   
 
 class Container(containers.DeclarativeContainer):

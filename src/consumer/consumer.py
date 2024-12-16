@@ -55,8 +55,7 @@ class Consumer:
 
         serv_log.info(f'Consumer {self.consumer_name!r} is listening ...')
         async for message in self.queue:
-            async with message.process():
-                await self._process_message(message)
+            await self._process_message(message)
 
 
     def run(self: Self):
