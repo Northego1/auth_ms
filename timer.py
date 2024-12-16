@@ -8,10 +8,10 @@ from logger import message_logger as mes_log
 
 def timer(func: Callable):
     @wraps(func)
-    async def async_wrapper(*args, **kwargs):
+    async def async_wrapper(*args, **kwargs) -> Callable:
         st = time()
         result = await func(*args, **kwargs)
-        mes_log.warning(
+        mes_log.info(
             f'{func.__name__!r} func was executed '
             f'for {round((time() - st), 3)!r} second(s)'
         )
@@ -19,10 +19,10 @@ def timer(func: Callable):
     
 
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> Callable:
         st = time()
         result = func(*args, **kwargs)
-        mes_log.warning(
+        mes_log.info(
             f'{func.__name__!r} func was executed '
             f'for {round((time() - st), 3)!r} second(s)'
         )        

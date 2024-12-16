@@ -25,14 +25,14 @@ from tests.unit.config_data import mock_refresh_token
             },
             False
         ),
-                (
+        (
             {
                 "fingerprint": 123,
                 "refresh_token": mock_refresh_token.token,
             },
             True
         ),
-                (
+        (
             {
                 "fingerprint": b"mozilla",
                 "refresh_token": "non_correct",
@@ -45,6 +45,11 @@ async def test_refresh_jwt_controller(
     message_body: dict,
     exception: bool
 ):
+    '''
+    Юнит тест для рефреш аксес токен контроллера, перезаписываем зависимости на моки, 
+    ожидаем схему со статус кодом 200 в удачном случае, а в случае ошибки
+    от 400 до 600
+    '''
     mock_message = MagicMock(spec=IncomingMessage)
     mock_message.body = pickle.dumps(message_body)
     container.refresh_jwt_controller.override(

@@ -77,6 +77,11 @@ async def test_check_and_invalidate_session(
     fingerprint_hash: bytes,
     expectation: Optional[pytest.raises]
 ):
+    '''
+    Юнит тест для сервиса управления сессиями, перезаписываем зависимости
+    на моки, функция ожидает рефреш токен схему,
+    функция ничего не возвращает, но в случае ошибки ожидаем "expectation"
+    '''
     container.user_session_service.override(
         providers.Factory(
             UserSessionServiceImpl,

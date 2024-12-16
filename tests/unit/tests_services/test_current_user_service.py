@@ -30,6 +30,13 @@ async def test_current_user_service(
     token_schema: RefreshTokenSchema,
     expectation: Optional[pytest.raises]
 ):
+    '''
+    Юнит тест для сервиса нахождения текущего пользователя,
+    перезаписываем зависимости на моки, 
+    функция ожидает аксес токен схему, или рефреш токен схему
+    функция возвращает "UserSchema", 
+    в случае ошибки ожидаем "expectation"
+    '''
     container.get_user_by_jwt.override(
         providers.Factory(
             CurrentUserServiceImpl,

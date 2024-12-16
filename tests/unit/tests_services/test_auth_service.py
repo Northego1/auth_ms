@@ -50,6 +50,11 @@ async def test_user_auth_service(
     user_login_schema: MsRequestLoginDto,
     expectation: Optional[pytest.raises]
 ): 
+    '''
+    Юнит тест для сервиса аутентификации, перезаписываем зависимости на моки, 
+    функция ожидает аксес токен схему, функция возвращает "UserSchema", 
+    в случае ошибки ожидаем "expectation"
+    '''
     with patch.object(
         UserAuthServiceImpl,
         '_verify_password',

@@ -46,6 +46,11 @@ async def test_login_controller(
         message_body: dict,
         exception: bool,
 ):
+    '''
+    Юнит тест для логин контроллера, перезаписываем зависимости на моки, 
+    ожидаем схему со статус кодом 200 в удачном случае, а в случае ошибки
+    от 400 до 600
+    '''
     mock_message = MagicMock(spec=IncomingMessage)
     mock_message.body = pickle.dumps(message_body)
     container.login_controller.override(

@@ -68,6 +68,11 @@ async def test_check_access_token_blacklist(
     access_token_schema: AccessTokenSchema,
     expectation: Optional[pytest.raises]
 ):
+    '''
+    Юнит тест для аксес токен сервиса, перезаписываем зависимости на моки, 
+    функция ожидает аксес токен схему, функция ничего не возвращает, 
+    но в случае ошибки ожидаем "expectation"
+    '''
     container.access_token_service.override(
         providers.Factory(
             AccessTokenServiceImpl,

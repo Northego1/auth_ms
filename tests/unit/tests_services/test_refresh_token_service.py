@@ -27,6 +27,11 @@ def test_create_token(
     mock_user: UserSchema,
     expectation: Optional[pytest.raises]
 ):
+    '''
+    Юнит тест для сервиса создания рефреш токена, перезаписываем зависимости на моки, 
+    функция ожидает аксес токен схему, функция возвращает рефреш токен схему, 
+    в случае ошибки ожидаем "expectation"
+    '''
     container.refresh_jwt_service.override(
         providers.Factory(
             RefreshJwtServiceImpl,

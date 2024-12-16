@@ -1,12 +1,13 @@
 from pathlib import Path
 from typing import LiteralString, Self
 from pydantic import BaseModel
+from pydantic_settings import BaseSettings
 
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 
 
-class DbSettings:
+class DbSettings(BaseSettings):
     DB_NAME: str = 'auth'
     DB_HOST: str = 'localhost'
     DB_PORT: int = 5436
@@ -21,22 +22,13 @@ class DbSettings:
             f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}'
             f'@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'
         )
-    
-
-    @property
-    def test_postgres_dsn(self: Self) -> str:
-        return (
-            f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}'
-            f'@{self.DB_HOST}:{self.DB_PORT}/{self.TEST_DB_NAME}'
-        )
 
 
-class RabbitMQSettings:
-    RMQ_HOST: str= "0.0.0.0"
-    RMQ_PORT: int = 5672
-    RMQ_USER: str = "guest"
-    RMQ_PASSWORD: str = "guest"
-
+class RabbitMQSettings(BaseSettings):
+    RMQ_HOST: str
+    RMQ_PORT: int
+    RMQ_USER: str
+    RMQ_PASSWORD: str
 
     @property
     def rabbit_mq_dsn(self: Self) -> str:

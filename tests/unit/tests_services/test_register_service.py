@@ -35,6 +35,11 @@ async def test_register_service(
     user_register_schema: MsRequestRegisterDto,
     expectation: Optional[pytest.raises]
 ):
+    '''
+    Юнит тест для сервиса регистрации пользователя, перезаписываем зависимости
+    на моки, функция ожидает данные о запросе из gateway (Схему MsRequestRegisterDto),
+    функция возвращает "UserSchema", в случае ошибки ожидаем "expectation"
+    '''
     container.register_service.override(
         providers.Factory(
             RegisterUserServiceImpl,

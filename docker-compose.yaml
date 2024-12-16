@@ -1,4 +1,9 @@
 services:
+  auth_ms:
+    container_name: auth_ms
+    build:
+      context: .
+    command: 
   postgresql:
     container_name: psql_db_auth
     image: postgres:latest
