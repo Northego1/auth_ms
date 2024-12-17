@@ -4,3 +4,5 @@
 .env-non-dev
 .test.env
 jwt_certs
+/.__pycache__
+/.patest_cache

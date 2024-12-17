@@ -1,11 +1,9 @@
 import os
 from pathlib import Path
-from typing import LiteralString, Self
+from typing import Self
 from pydantic import BaseModel
 
 from dotenv import load_dotenv
-
-
 
 
 BASE_DIR = Path(__file__).resolve().parents[1]
