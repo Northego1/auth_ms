@@ -1,14 +1,16 @@
 services:
   auth_ms:
-    container_name: auth_ms
     build:
       context: .
+    deploy:
+      replicas: 2
     command: 
       ["sh", "docker/app.sh"]
     env_file:
       - .env
     depends_on:
       - postgresql
+
 
   postgresql:
     container_name: psql_auth_ms

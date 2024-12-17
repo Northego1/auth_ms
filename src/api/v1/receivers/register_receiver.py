@@ -15,7 +15,7 @@ consumer = consumer_pool.get_consumer('auth_consumer')
 async def handle_register(
     message: IncomingMessage,
 ):
-    async with message.process(bulk=True):
+    async with message.process():
         register_controller: controllers.RegisterUserControllerProtocol = (
             await controllers.RegiserUserController()
         )
